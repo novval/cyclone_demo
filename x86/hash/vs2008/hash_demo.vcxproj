@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{036BF4CE-AFF9-4A49-A5DB-AA25861F4BC4}</ProjectGuid>
+    <RootNamespace>hash_demo</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>15.0.28307.799</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\;..\src;..\..\..\..\common;..\..\..\..\cyclone_crypto;..\..\..\..\cyclone_ssl;..\..\..\..\cyclone_tcp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\src;..\..\..\..\common;..\..\..\..\cyclone_crypto;..\..\..\..\cyclone_ssl;..\..\..\..\cyclone_tcp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\common\cpu_endian.h" />
+    <ClInclude Include="..\..\..\..\common\date_time.h" />
+    <ClInclude Include="..\..\..\..\common\debug.h" />
+    <ClInclude Include="..\..\..\..\common\error.h" />
+    <ClInclude Include="..\..\..\..\common\os_port.h" />
+    <ClInclude Include="..\..\..\..\common\os_port_windows.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\aead\aead_algorithms.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\aead\ccm.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\aead\chacha20_poly1305.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\aead\gcm.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\cipher\aes.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\cipher\aria.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\cipher\camellia.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\cipher\chacha.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\cipher\cipher_algorithms.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\cipher\des.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\cipher\des3.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\cipher\idea.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\cipher\rc4.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\cipher\seed.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\cipher_modes\cbc.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\cipher_modes\cipher_modes.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\core\crypto.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\ecc\curve25519.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\ecc\curve448.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\ecc\ec.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\ecc\ecdh.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\ecc\ecdsa.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\ecc\ec_curves.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\ecc\ed25519.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\ecc\ed448.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\ecc\eddsa.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\ecc\x25519.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\ecc\x448.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\encoding\asn1.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\encoding\base64.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\encoding\oid.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\hash\hash_algorithms.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\hash\md5.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\hash\sha1.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\hash\sha224.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\hash\sha256.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\hash\sha384.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\hash\sha512.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\hash\streebog.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\kdf\hkdf.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\kdf\pbkdf.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\mac\hmac.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\mac\mac_algorithms.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\mac\poly1305.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\mpi\mpi.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkc\dh.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkc\dsa.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkc\key_exch_algorithms.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkc\rsa.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkc\sign_algorithms.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\pem_common.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\pem_decrypt.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\pem_import.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\pkcs5_common.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\pkcs5_decrypt.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\pkcs8_key_parse.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\x509_cert_ext_parse.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\x509_cert_parse.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\x509_cert_validate.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\x509_common.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\x509_crl_ext_parse.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\x509_crl_parse.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\x509_crl_validate.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\x509_key_parse.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\x509_sign_parse.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\pkix\x509_sign_verify.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\rng\yarrow.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\xof\keccak.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\xof\shake.h" />
+    <ClInclude Include="..\src\crypto_config.h" />
+    <ClInclude Include="..\src\os_port_config.h" />
+    <ClInclude Include="..\src\tls_config.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\common\cpu_endian.c" />
+    <ClCompile Include="..\..\..\..\common\date_time.c" />
+    <ClCompile Include="..\..\..\..\common\debug.c" />
+    <ClCompile Include="..\..\..\..\common\os_port_windows.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\aead\ccm.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\aead\chacha20_poly1305.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\aead\gcm.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\cipher\aes.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\cipher\aria.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\cipher\camellia.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\cipher\chacha.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\cipher\des.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\cipher\des3.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\cipher\idea.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\cipher\rc4.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\cipher\seed.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\cipher_modes\cbc.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\ecc\curve25519.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\ecc\curve448.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\ecc\ec.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\ecc\ecdh.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\ecc\ecdsa.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\ecc\ec_curves.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\ecc\ed25519.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\ecc\ed448.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\ecc\eddsa.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\ecc\x25519.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\ecc\x448.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\encoding\asn1.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\encoding\base64.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\encoding\oid.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\hash\md5.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\hash\sha1.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\hash\sha224.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\hash\sha256.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\hash\sha384.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\hash\sha512.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\hash\streebog.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\kdf\hkdf.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\kdf\pbkdf.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\mac\hmac.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\mac\poly1305.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\mpi\mpi.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkc\dh.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkc\dsa.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkc\rsa.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\pem_common.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\pem_decrypt.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\pem_import.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\pkcs5_common.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\pkcs5_decrypt.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\pkcs8_key_parse.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\x509_cert_ext_parse.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\x509_cert_parse.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\x509_cert_validate.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\x509_common.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\x509_crl_ext_parse.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\x509_crl_parse.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\x509_crl_validate.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\x509_key_parse.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\x509_sign_parse.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\pkix\x509_sign_verify.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\rng\yarrow.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\xof\keccak.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\xof\shake.c" />
+    <ClCompile Include="..\src\main.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
