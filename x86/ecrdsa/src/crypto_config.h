@@ -227,15 +227,15 @@
 //secp224k1 elliptic curve support
 #define SECP224K1_SUPPORT DISABLED
 //secp224r1 elliptic curve support (NIST P-224)
-#define SECP224R1_SUPPORT ENABLED
+#define SECP224R1_SUPPORT DISABLED
 //secp256k1 elliptic curve support
 #define SECP256K1_SUPPORT DISABLED
 //secp256r1 elliptic curve support (NIST P-256)
-#define SECP256R1_SUPPORT ENABLED
+#define SECP256R1_SUPPORT DISABLED
 //secp384r1 elliptic curve support (NIST P-384)
-#define SECP384R1_SUPPORT ENABLED
+#define SECP384R1_SUPPORT DISABLED
 //secp521r1 elliptic curve support (NIST P-521)
-#define SECP521R1_SUPPORT ENABLED
+#define SECP521R1_SUPPORT DISABLED
 //brainpoolP160r1 elliptic curve support
 #define BRAINPOOLP160R1_SUPPORT DISABLED
 //brainpoolP192r1 elliptic curve support
@@ -260,6 +260,10 @@
 #define ED25519_SUPPORT DISABLED
 //Ed448 elliptic curve support
 #define ED448_SUPPORT DISABLED
+//tc26Sign512a elliptic curve support (GOST 34.10-2012 RFC 7836)
+#define TC26SIGN512A_SUPPORT ENABLED
+//tc26Sign512b elliptic curve support (GOST 34.10-2012 RFC 7836)
+#define TC26SIGN512B_SUPPORT ENABLED
 
 //Key encapsulation mechanism support
 #define KEM_SUPPORT DISABLED

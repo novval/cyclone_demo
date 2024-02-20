@@ -154,6 +154,7 @@
     <ClInclude Include="..\..\..\..\cyclone_crypto\hash\sha256.h" />
     <ClInclude Include="..\..\..\..\cyclone_crypto\hash\sha384.h" />
     <ClInclude Include="..\..\..\..\cyclone_crypto\hash\sha512.h" />
+    <ClInclude Include="..\..\..\..\cyclone_crypto\hash\streebog.h" />
     <ClInclude Include="..\..\..\..\cyclone_crypto\kdf\hkdf.h" />
     <ClInclude Include="..\..\..\..\cyclone_crypto\kdf\pbkdf.h" />
     <ClInclude Include="..\..\..\..\cyclone_crypto\mac\hmac.h" />
@@ -246,6 +247,7 @@
     <ClCompile Include="..\..\..\..\cyclone_crypto\hash\sha256.c" />
     <ClCompile Include="..\..\..\..\cyclone_crypto\hash\sha384.c" />
     <ClCompile Include="..\..\..\..\cyclone_crypto\hash\sha512.c" />
+    <ClCompile Include="..\..\..\..\cyclone_crypto\hash\streebog.c" />
     <ClCompile Include="..\..\..\..\cyclone_crypto\kdf\hkdf.c" />
     <ClCompile Include="..\..\..\..\cyclone_crypto\kdf\pbkdf.c" />
     <ClCompile Include="..\..\..\..\cyclone_crypto\mac\hmac.c" />

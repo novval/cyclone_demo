@@ -55,7 +55,7 @@
 #include "debug.h"
 
 
-#define TEST_SIGN_COUNT 100//0
+#define TEST_SIGN_COUNT 10//0//0
 
 //Pseudo-random number generator
 YarrowContext yarrowContext;
@@ -170,7 +170,7 @@ int_t main(void)
 	//Initialize EC domain parameters
 	ecInitDomainParameters(&params);
 	//Load EC domain parameters
-	error = ecLoadDomainParameters(&params, SECP224R1_CURVE);
+	error = ecLoadDomainParameters(&params, TC26SIGN512A_CURVE);
 	params.h = 1;
 	params.mod = NULL;
 
@@ -203,7 +203,7 @@ int_t main(void)
 
 			if (error == NO_ERROR) {
 				TRACE_INFO("Time = %f seconds\n", seconds);
-				TRACE_INFO("Speed = %.2f signatures/second\n", (float)TEST_SIGN_COUNT / seconds);
+				TRACE_INFO("Speed = %.2f signatures/second (%.3f seconds/signature)\n", (float)TEST_SIGN_COUNT / seconds, seconds / TEST_SIGN_COUNT);
 			}
 			else {
 				TRACE_INFO("Error occured\n");
@@ -221,7 +221,7 @@ int_t main(void)
 
 			if (error == NO_ERROR) {
 				TRACE_INFO("Time = %f seconds\n", seconds);
-				TRACE_INFO("Speed = %.2f signatures/second\n", (float)TEST_SIGN_COUNT / seconds);
+				TRACE_INFO("Speed = %.2f signatures/second (%.3f seconds/signature)\n", (float)TEST_SIGN_COUNT / seconds, seconds / TEST_SIGN_COUNT);
 			}
 			else {
 				TRACE_INFO("Error occured\n");
