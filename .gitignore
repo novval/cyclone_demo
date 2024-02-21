@@ -14,3 +14,10 @@
 /x86/hash/vs2008/Backup
 /x86/hash/vs2008/Debug
 /x86/hash/vs2008/Release
+/x86/chipher/vs2008/*.filters
+/x86/chipher/vs2008/*.user
+/x86/chipher/vs2008/*.htm
+/x86/chipher/vs2008/.vs
+/x86/chipher/vs2008/Backup
+/x86/chipher/vs2008/Debug
+/x86/chipher/vs2008/Release
