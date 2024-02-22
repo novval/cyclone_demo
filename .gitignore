@@ -21,3 +21,10 @@
 /x86/chipher/vs2008/Backup
 /x86/chipher/vs2008/Debug
 /x86/chipher/vs2008/Release
+/st/stm32f407/cipher_demo/keil/*.uvoptx
+/st/stm32f407/cipher_demo/keil/*.val
+/st/stm32f407/cipher_demo/keil/*.map
+/st/stm32f407/cipher_demo/keil/*.lst
+/st/stm32f407/cipher_demo/keil/cipher_demo_flash
+/st/stm32f407/cipher_demo/keil/cipher_demo_sram
+/st/stm32f407/cipher_demo/keil/DebugConfig
