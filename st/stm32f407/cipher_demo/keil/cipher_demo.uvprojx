@@ -55,7 +55,7 @@
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\</ListingPath>
+          <ListingPath>.\cipher_demo_flash\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F407xx USE_HAL_DRIVER USE_STM32F4_DISCO</Define>
               <Undefine></Undefine>
-              <IncludePath>..\src;..\..\..\..\..\third_party\cmsis\include;..\..\..\..\..\third_party\st\devices\stm32f4xx;..\..\..\..\..\third_party\st\drivers\stm32f4xx_hal_driver\inc;..\..\..\..\..\third_party\st\boards\stm32f4_discovery;..\..\..\..\..\third_party\freertos\include;..\..\..\..\..\third_party\freertos\portable\rvds\arm_cm4f;..\..\..\..\..\common;..\..\..\..\..\cyclone_tcp;..\..\..\..\..\cyclone_ssl;..\..\..\..\..\cyclone_crypto</IncludePath>
+              <IncludePath>..\src;..\..\..\..\..\common;..\..\..\..\..\cyclone_tcp;..\..\..\..\..\cyclone_ssl;..\..\..\..\..\cyclone_crypto</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1253,7 +1253,7 @@
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>0</BrowseInformation>
-          <ListingPath>.\</ListingPath>
+          <ListingPath>.\cipher_demo_sram\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
