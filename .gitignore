@@ -28,3 +28,13 @@
 /st/stm32f407/cipher_demo/keil/cipher_demo_flash
 /st/stm32f407/cipher_demo/keil/cipher_demo_sram
 /st/stm32f407/cipher_demo/keil/DebugConfig
+/st/stm32f407/tls_server_demo/keil/DebugConfig
+/st/stm32f407/tls_server_demo/keil/tls_server_demo_flash
+/st/stm32f407/tls_server_demo/keil/tls_server_demo_sram
+/st/stm32f407/tls_server_demo/keil/*.uvoptx
+/st/stm32f407/tls_server_demo/keil/*.val
+/st/stm32f407/tls_server_demo-freertos/keil/*.val
+/st/stm32f407/tls_server_demo-freertos/keil/*.uvoptx
+/st/stm32f407/tls_server_demo-freertos/keil/DebugConfig
+/st/stm32f407/tls_server_demo-freertos/keil/tls_server_demo_flash
+/st/stm32f407/tls_server_demo-freertos/keil/tls_server_demo_sram
