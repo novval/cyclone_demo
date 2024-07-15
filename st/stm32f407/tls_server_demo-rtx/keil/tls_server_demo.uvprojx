@@ -176,7 +176,7 @@
             <GenPPlst>0</GenPPlst>
             <AdsCpuType>"Cortex-M4"</AdsCpuType>
             <RvctDeviceName></RvctDeviceName>
-            <mOS>0</mOS>
+            <mOS>1</mOS>
             <uocRom>0</uocRom>
             <uocRam>0</uocRam>
             <hadIROM>1</hadIROM>
@@ -276,7 +276,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x80000</Size>
+                <Size>0x100000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F407xx USE_HAL_DRIVER USE_STM32F4_DISCO</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\..\third_party\freertos\portable\rvds\arm_cm4f;..\..\..\..\..\third_party\freertos\include;..\src;..\..\..\..\..\common;..\..\..\..\..\cyclone_tcp;..\..\..\..\..\cyclone_ssl;..\..\..\..\..\cyclone_crypto</IncludePath>
+              <IncludePath>..\src;..\..\..\..\..\common;..\..\..\..\..\cyclone_tcp;..\..\..\..\..\cyclone_ssl;..\..\..\..\..\cyclone_crypto</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -403,11 +403,6 @@
               <FileType>1</FileType>
               <FilePath>..\src\res.c</FilePath>
             </File>
-            <File>
-              <FileName>stm32f4xx_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\stm32f4xx_it.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -433,11 +428,6 @@
               <FileType>5</FileType>
               <FilePath>..\src\crypto_config.h</FilePath>
             </File>
-            <File>
-              <FileName>FreeRTOSConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\FreeRTOSConfig.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -449,9 +439,9 @@
               <FilePath>..\..\..\..\..\common\cpu_endian.c</FilePath>
             </File>
             <File>
-              <FileName>os_port_freertos.c</FileName>
+              <FileName>os_port_cmsis_rtos.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\common\os_port_freertos.c</FilePath>
+              <FilePath>..\..\..\..\..\common\os_port_cmsis_rtos.c</FilePath>
             </File>
             <File>
               <FileName>date_time.c</FileName>
@@ -489,9 +479,9 @@
               <FilePath>..\..\..\..\..\common\os_port.h</FilePath>
             </File>
             <File>
-              <FileName>os_port_freertos.h</FileName>
+              <FileName>os_port_cmsis_rtos.c</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\common\os_port_freertos.h</FilePath>
+              <FilePath>..\..\..\..\..\common\os_port_cmsis_rtos.c</FilePath>
             </File>
             <File>
               <FileName>date_time.h</FileName>
@@ -2171,111 +2161,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>FreeRTOS Sources</GroupName>
-          <Files>
-            <File>
-              <FileName>croutine.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\croutine.c</FilePath>
-            </File>
-            <File>
-              <FileName>list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\list.c</FilePath>
-            </File>
-            <File>
-              <FileName>queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>tasks.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\tasks.c</FilePath>
-            </File>
-            <File>
-              <FileName>timers.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\timers.c</FilePath>
-            </File>
-            <File>
-              <FileName>heap_3.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\portable\memmang\heap_3.c</FilePath>
-            </File>
-            <File>
-              <FileName>port.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\portable\rvds\arm_cm4f\port.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>FreeRTOS Headers</GroupName>
-          <Files>
-            <File>
-              <FileName>croutine.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\include\croutine.h</FilePath>
-            </File>
-            <File>
-              <FileName>FreeRTOS.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\include\FreeRTOS.h</FilePath>
-            </File>
-            <File>
-              <FileName>list.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\include\list.h</FilePath>
-            </File>
-            <File>
-              <FileName>mpu_wrappers.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\include\mpu_wrappers.h</FilePath>
-            </File>
-            <File>
-              <FileName>portable.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\include\portable.h</FilePath>
-            </File>
-            <File>
-              <FileName>projdefs.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\include\projdefs.h</FilePath>
-            </File>
-            <File>
-              <FileName>queue.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\include\queue.h</FilePath>
-            </File>
-            <File>
-              <FileName>semphr.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\include\semphr.h</FilePath>
-            </File>
-            <File>
-              <FileName>stack_macros.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\include\stack_macros.h</FilePath>
-            </File>
-            <File>
-              <FileName>task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\include\task.h</FilePath>
-            </File>
-            <File>
-              <FileName>timers.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\include\timers.h</FilePath>
-            </File>
-            <File>
-              <FileName>portmacro.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\third_party\freertos\portable\rvds\arm_cm4f\portmacro.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
         <Group>
@@ -2287,6 +2172,12 @@
 
   <RTE>
     <apis>
+      <api Capiversion="1.0.0" Cclass="CMSIS" Cgroup="RTOS" exclusive="1">
+        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.7.0"/>
+        <targetInfos>
+          <targetInfo name="tls_server_demo_flash"/>
+        </targetInfos>
+      </api>
       <api Capiversion="1.0.0" Cclass="Device" Cgroup="STM32Cube Framework" exclusive="1">
         <package name="STM32F4xx_DFP" schemaVersion="1.6.3" url="http://www.keil.com/pack/" vendor="Keil" version="2.15.0"/>
         <targetInfos>
@@ -2296,6 +2187,12 @@
     </apis>
     <components>
       <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.4.0" condition="ARMv6_7_8-M Device">
+        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.7.0"/>
+        <targetInfos>
+          <targetInfo name="tls_server_demo_flash"/>
+        </targetInfos>
+      </component>
+      <component Capiversion="1.0.0" Cclass="CMSIS" Cgroup="RTOS" Csub="Keil RTX" Cvendor="ARM" Cversion="4.82.0" condition="RTOS RTX">
         <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.7.0"/>
         <targetInfos>
           <targetInfo name="tls_server_demo_flash"/>
@@ -2363,6 +2260,14 @@
       </component>
     </components>
     <files>
+      <file attr="config" category="source" name="CMSIS\RTOS\RTX\Templates\RTX_Conf_CM.c" version="4.70.1">
+        <instance index="0">RTE\CMSIS\RTX_Conf_CM.c</instance>
+        <component Capiversion="1.0.0" Cclass="CMSIS" Cgroup="RTOS" Csub="Keil RTX" Cvendor="ARM" Cversion="4.82.0" condition="RTOS RTX" isDefaultVariant="1"/>
+        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.7.0"/>
+        <targetInfos>
+          <targetInfo name="tls_server_demo_flash"/>
+        </targetInfos>
+      </file>
       <file attr="config" category="header" name="CMSIS\Driver\Config\RTE_Device.h" version="2.4.5">
         <instance index="0">RTE\Device\STM32F407VETx\RTE_Device.h</instance>
         <component Capiversion="1.0.0" Cclass="Device" Cgroup="STM32Cube Framework" Csub="Classic" Cvendor="Keil" Cversion="1.7.9" condition="STM32F4 Framework Classic"/>

@@ -1,6 +1,6 @@
 /**
- * @file ext_int_driver.h
- * @brief External interrupt line driver
+ * @file os_port_config.h
+ * @brief RTOS port configuration file
  *
  * @section License
  *
@@ -26,15 +26,21 @@
  * @version 2.4.2
  **/
 
-#ifndef _EXT_INT_DRIVER_H
-#define _EXT_INT_DRIVER_H
+#ifndef _OS_PORT_CONFIG_H
+#define _OS_PORT_CONFIG_H
 
-//External interrupt line driver
-extern const ExtIntDriver extIntDriver;
+//Dependencies
+#include "RTE_Components.h"
 
-//External interrupt related functions
-error_t extIntInit(void);
-void extIntEnableIrq(void);
-void extIntDisableIrq(void);
+//Select underlying RTOS
+#if defined(RTE_CMSIS_RTOS)
+   #define USE_CMSIS_RTOS
+#elif defined(RTE_CMSIS_RTOS2)
+   #define USE_CMSIS_RTOS2
+#elif defined(RTE_RTOS_FreeRTOS_CORE)
+   #define USE_FREERTOS
+#else
+   #define USE_NO_RTOS
+#endif
 
 #endif

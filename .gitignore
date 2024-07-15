@@ -38,3 +38,7 @@
 /st/stm32f407/tls_server_demo-freertos/keil/DebugConfig
 /st/stm32f407/tls_server_demo-freertos/keil/tls_server_demo_flash
 /st/stm32f407/tls_server_demo-freertos/keil/tls_server_demo_sram
+/st/stm32f407/tls_server_demo-rtx/keil/*.val
+/st/stm32f407/tls_server_demo-rtx/keil/*.uvoptx
+/st/stm32f407/tls_server_demo-rtx/keil/DebugConfig
+/st/stm32f407/tls_server_demo-rtx/keil/tls_server_demo_flash

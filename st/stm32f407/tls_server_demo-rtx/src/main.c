@@ -35,6 +35,8 @@
 #include "stm32f4xx_hal_pwr_ex.h"
 #include "stm32f4xx_hal_flash.h"
 #include "stm32f4xx_ll_fsmc.h"
+//#include "Board_LED.h"
+//#include "Board_Buttons.h"
 #include "os_port.h"
 #include "core/net.h"
 #include "drivers/mac/stm32f4xx_eth_driver.h"
@@ -50,6 +52,8 @@
 #include "resource_manager.h"
 #include "debug.h"
 
+//#include "sam.h"
+//#include "samv71_xplained_ultra.h"
 #include "core/net.h"
 #include "drivers/mac/stm32f4xx_eth_driver.h"
 #include "drivers/phy/lan8720_driver.h"
@@ -279,7 +283,7 @@ int_t main(void)
    TRACE_INFO("**********************************\r\n");
    TRACE_INFO("Copyright: 2010-2024 Oryx Embedded SARL\r\n");
    TRACE_INFO("Compiled: %s %s\r\n", __DATE__, __TIME__);
-   TRACE_INFO("Target: SATM32\r\n");
+   TRACE_INFO("Target: STM32\r\n");
    TRACE_INFO("\r\n");
 
    //Configure I/Os
