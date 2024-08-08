@@ -36,25 +36,11 @@
 #include "stm32f4xx_hal_flash.h"
 #include "stm32f4xx_ll_fsmc.h"
 #include "os_port.h"
-#include "core/net.h"
-#include "drivers/mac/stm32f4xx_eth_driver.h"
-#include "drivers/phy/lan8720_driver.h"
-#include "dhcp/dhcp_client.h"
-#include "ipv6/slaac.h"
-#include "mdns/mdns_responder.h"
-#include "http/http_server.h"
-#include "http/mime.h"
 #include "str.h"
 #include "path.h"
 #include "date_time.h"
 #include "resource_manager.h"
-#include "debug.h"
 
-#include "core/net.h"
-#include "drivers/mac/stm32f4xx_eth_driver.h"
-#include "drivers/phy/lan8720_driver.h"
-#include "dhcp/dhcp_client.h"
-#include "ipv6/slaac.h"
 #include "tls.h"
 #include "tls_cipher_suites.h"
 #include "tls_ticket.h"
@@ -65,26 +51,9 @@
 #include "resource_manager.h"
 #include "debug.h"
 
-//Ethernet interface configuration
-#define APP_IF_NAME "eth0"
-#define APP_HOST_NAME "tls-server-demo"
-#define APP_MAC_ADDR "00-AB-CD-EF-71-21"
-
-#define APP_USE_DHCP_CLIENT ENABLED
-#define APP_IPV4_HOST_ADDR "192.168.1.20"
-#define APP_IPV4_SUBNET_MASK "255.255.255.0"
-#define APP_IPV4_DEFAULT_GATEWAY "192.168.1.1"
-#define APP_IPV4_PRIMARY_DNS "8.8.8.8"
-#define APP_IPV4_SECONDARY_DNS "8.8.4.4"
-
-#define APP_USE_SLAAC ENABLED
-#define APP_IPV6_LINK_LOCAL_ADDR "fe80::7121"
-#define APP_IPV6_PREFIX "2001:db8::"
-#define APP_IPV6_PREFIX_LENGTH 64
-#define APP_IPV6_GLOBAL_ADDR "2001:db8::7121"
-#define APP_IPV6_ROUTER "fe80::1"
-#define APP_IPV6_PRIMARY_DNS "2001:4860:4860::8888"
-#define APP_IPV6_SECONDARY_DNS "2001:4860:4860::8844"
+#include "memblock.h"
+#include "slip_uart.h"
+#include "slip_uart_sock.h"
 
 //Application configuration
 #define APP_SERVER_PORT 443
@@ -98,10 +67,6 @@
 uint_t hitCounter = 0;
 
 OsSemaphore connectionSemaphore;
-DhcpClientSettings dhcpClientSettings;
-DhcpClientContext dhcpClientContext;
-SlaacSettings slaacSettings;
-SlaacContext slaacContext;
 TlsCache *tlsCache;
 TlsTicketContext tlsTicketContext;
 YarrowContext yarrowContext;
@@ -112,7 +77,24 @@ void tlsServerTask(void *param);
 void tlsClientTask(void *param);
 size_t dumpArray(char_t *buffer, const uint8_t *data, size_t length);
 
+static error_t tlsSendCallback(TlsSocketHandle socket, const void *data, size_t length, size_t *written, uint_t flags);
+static error_t tlsReceiveCallback(TlsSocketHandle socket, void *data, size_t size, size_t *received, uint_t flags);
 
+//void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+//{
+//  osSetEventFromIsr(&slipTx);
+//}
+
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  while (1)
+  {
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
 
 /**
  * @brief System clock configuration
@@ -165,11 +147,11 @@ void ioInit(void)
 
 	//LED configuration
 	// PE4 - MB-12 | PC6 - CP-15  -- Green
-	GPIO_InitStruct.Pin = GPIO_PIN_4;
+	GPIO_InitStruct.Pin = GPIO_PIN_6;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
 	// PD14 - Red
 	GPIO_InitStruct.Pin = GPIO_PIN_14;
@@ -181,37 +163,37 @@ void ioInit(void)
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
 
-	//Enable GPIOA clock
-	__HAL_RCC_GPIOA_CLK_ENABLE();
+//	//Enable GPIOA clock
+//	__HAL_RCC_GPIOA_CLK_ENABLE();
 
-	//Configure MCO1 (PA8) as an output 25MHz for PHY LAN8720
-	GPIO_InitStruct.Pin = GPIO_PIN_8;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-	GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+//	//Configure MCO1 (PA8) as an output 25MHz for PHY LAN8720
+//	GPIO_InitStruct.Pin = GPIO_PIN_8;
+//	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+//	GPIO_InitStruct.Pull = GPIO_NOPULL;
+//	GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+//	GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
+//	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-	//Configure MCO1 pin to output the HSE clock (25MHz)
-	HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_1);
+//	//Configure MCO1 pin to output the HSE clock (25MHz)
+//	HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_1);
 
-	//Enable GPIOE clock
-	__HAL_RCC_GPIOE_CLK_ENABLE();
+//	//Enable GPIOE clock
+//	__HAL_RCC_GPIOE_CLK_ENABLE();
 
-	//Configure PE2 (PHY_RST) pin as an output
-	// PE7 - CP-15,  PE2 - Disco
-	GPIO_InitStruct.Pin = GPIO_PIN_7;//GPIO_PIN_2;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+//	//Configure PE2 (PHY_RST) pin as an output
+//	// PE7 - CP-15,  PE2 - Disco
+//	GPIO_InitStruct.Pin = GPIO_PIN_7;//GPIO_PIN_2;
+//	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+//	GPIO_InitStruct.Pull = GPIO_NOPULL;
+//	GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+//	HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-	//Reset PHY transceiver (hard reset)
-	// PE7 - CP-15,  PE2 - Disco
-	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7 /*GPIO_PIN_2*/, GPIO_PIN_RESET);
-	sleep(10);
-	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7 /*GPIO_PIN_2*/, GPIO_PIN_SET);
-	sleep(10);
+//	//Reset PHY transceiver (hard reset)
+//	// PE7 - CP-15,  PE2 - Disco
+//	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7 /*GPIO_PIN_2*/, GPIO_PIN_RESET);
+//	sleep(10);
+//	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7 /*GPIO_PIN_2*/, GPIO_PIN_SET);
+//	sleep(10);
 }
 
 
@@ -225,10 +207,10 @@ void ledTask(void *param)
    //Endless loop
    while(1)
    {
-//      PIO_LED0->PIO_CODR = LED0;
-      osDelayTask(100);
-//      PIO_LED0->PIO_SODR = LED0;
-      osDelayTask(900);
+      osDelayTask(50);
+      GPIOC->BSRR = GPIO_PIN_6;
+      osDelayTask(950);
+      GPIOC->BSRR = GPIO_PIN_6 << 16;
    }
 }
 
@@ -243,24 +225,6 @@ int_t main(void)
    error_t error;
    OsTaskId taskId;
    OsTaskParameters taskParams;
-   NetInterface *interface;
-   MacAddr macAddr;
-#if (APP_USE_DHCP_CLIENT == DISABLED)
-   Ipv4Addr ipv4Addr;
-#endif
-#if (APP_USE_SLAAC == DISABLED)
-   Ipv6Addr ipv6Addr;
-#endif
-
-   //Disable watchdog timer
-//   WDT_REGS->WDT_MR = WDT_MR_WDDIS_Msk;
-
-   //MPU configuration
-   //mpuConfig();
-
-   //Enable I-cache and D-cache
-   //SCB_EnableICache();
-   //SCB_EnableDCache();
 
    //HAL library initialization
    HAL_Init();
@@ -270,13 +234,13 @@ int_t main(void)
    //Initialize kernel
    osInitKernel();
    //Configure debug UART
-   debugInit(115200*2);
+   debugInit(115200);
 
    //Start-up message
    TRACE_INFO("\r\n");
-   TRACE_INFO("**********************************\r\n");
-   TRACE_INFO("*** CycloneSSL TLS Server Demo ***\r\n");
-   TRACE_INFO("**********************************\r\n");
+   TRACE_INFO("***************************************\r\n");
+   TRACE_INFO("*** CycloneSSL TLS Server Demo Uart ***\r\n");
+   TRACE_INFO("***************************************\r\n");
    TRACE_INFO("Copyright: 2010-2024 Oryx Embedded SARL\r\n");
    TRACE_INFO("Compiled: %s %s\r\n", __DATE__, __TIME__);
    TRACE_INFO("Target: STM32\r\n");
@@ -285,6 +249,12 @@ int_t main(void)
    //Configure I/Os
    ioInit();
 
+   slip_sock_init();
+   
+   MB_Init();
+   SU_Init();
+
+  
    //Initialize hardware cryptographic accelerator
    error = stm32f4xxCryptoInit();
    //Any error to report?
@@ -322,134 +292,13 @@ int_t main(void)
    }
 
    //TCP/IP stack initialization
-   error = netInit();
+//   error = netInit();
    //Any error to report?
    if(error)
    {
       //Debug message
       TRACE_ERROR("Failed to initialize TCP/IP stack!\r\n");
    }
-
-   //Configure the first Ethernet interface
-   interface = &netInterface[0];
-
-   //Set interface name
-   netSetInterfaceName(interface, APP_IF_NAME);
-   //Set host name
-   netSetHostname(interface, APP_HOST_NAME);
-   //Set host MAC address
-   macStringToAddr(APP_MAC_ADDR, &macAddr);
-   netSetMacAddr(interface, &macAddr);
-   //Select the relevant network adapter
-   netSetDriver(interface, &stm32f4xxEthDriver);
-   netSetPhyDriver(interface, &lan8720PhyDriver);
-   //Set external interrupt line driver
-   //netSetExtIntDriver(interface, &extIntDriver);
-
-   //Initialize network interface
-   error = netConfigInterface(interface);
-   //Any error to report?
-   if(error)
-   {
-      //Debug message
-      TRACE_ERROR("Failed to configure interface %s!\r\n", interface->name);
-   }
-
-#if (IPV4_SUPPORT == ENABLED)
-#if (APP_USE_DHCP_CLIENT == ENABLED)
-   //Get default settings
-   dhcpClientGetDefaultSettings(&dhcpClientSettings);
-   //Set the network interface to be configured by DHCP
-   dhcpClientSettings.interface = interface;
-   //Disable rapid commit option
-   dhcpClientSettings.rapidCommit = FALSE;
-
-   //DHCP client initialization
-   error = dhcpClientInit(&dhcpClientContext, &dhcpClientSettings);
-   //Failed to initialize DHCP client?
-   if(error)
-   {
-      //Debug message
-      TRACE_ERROR("Failed to initialize DHCP client!\r\n");
-   }
-
-   //Start DHCP client
-   error = dhcpClientStart(&dhcpClientContext);
-   //Failed to start DHCP client?
-   if(error)
-   {
-      //Debug message
-      TRACE_ERROR("Failed to start DHCP client!\r\n");
-   }
-#else
-   //Set IPv4 host address
-   ipv4StringToAddr(APP_IPV4_HOST_ADDR, &ipv4Addr);
-   ipv4SetHostAddr(interface, ipv4Addr);
-
-   //Set subnet mask
-   ipv4StringToAddr(APP_IPV4_SUBNET_MASK, &ipv4Addr);
-   ipv4SetSubnetMask(interface, ipv4Addr);
-
-   //Set default gateway
-   ipv4StringToAddr(APP_IPV4_DEFAULT_GATEWAY, &ipv4Addr);
-   ipv4SetDefaultGateway(interface, ipv4Addr);
-
-   //Set primary and secondary DNS servers
-   ipv4StringToAddr(APP_IPV4_PRIMARY_DNS, &ipv4Addr);
-   ipv4SetDnsServer(interface, 0, ipv4Addr);
-   ipv4StringToAddr(APP_IPV4_SECONDARY_DNS, &ipv4Addr);
-   ipv4SetDnsServer(interface, 1, ipv4Addr);
-#endif
-#endif
-
-#if (IPV6_SUPPORT == ENABLED)
-#if (APP_USE_SLAAC == ENABLED)
-   //Get default settings
-   slaacGetDefaultSettings(&slaacSettings);
-   //Set the network interface to be configured
-   slaacSettings.interface = interface;
-
-   //SLAAC initialization
-   error = slaacInit(&slaacContext, &slaacSettings);
-   //Failed to initialize SLAAC?
-   if(error)
-   {
-      //Debug message
-      TRACE_ERROR("Failed to initialize SLAAC!\r\n");
-   }
-
-   //Start IPv6 address autoconfiguration process
-   error = slaacStart(&slaacContext);
-   //Failed to start SLAAC process?
-   if(error)
-   {
-      //Debug message
-      TRACE_ERROR("Failed to start SLAAC!\r\n");
-   }
-#else
-   //Set link-local address
-   ipv6StringToAddr(APP_IPV6_LINK_LOCAL_ADDR, &ipv6Addr);
-   ipv6SetLinkLocalAddr(interface, &ipv6Addr);
-
-   //Set IPv6 prefix
-   ipv6StringToAddr(APP_IPV6_PREFIX, &ipv6Addr);
-   ipv6SetPrefix(interface, 0, &ipv6Addr, APP_IPV6_PREFIX_LENGTH);
-
-   //Set global address
-   ipv6StringToAddr(APP_IPV6_GLOBAL_ADDR, &ipv6Addr);
-   ipv6SetGlobalAddr(interface, 0, &ipv6Addr);
-
-   //Set default router
-   ipv6StringToAddr(APP_IPV6_ROUTER, &ipv6Addr);
-   ipv6SetDefaultRouter(interface, 0, &ipv6Addr);
-
-   //Set primary and secondary DNS servers
-   ipv6StringToAddr(APP_IPV6_PRIMARY_DNS, &ipv6Addr);
-   ipv6SetDnsServer(interface, 0, &ipv6Addr);
-   ipv6StringToAddr(APP_IPV6_SECONDARY_DNS, &ipv6Addr);
-   ipv6SetDnsServer(interface, 1, &ipv6Addr);
-#endif
-#endif
 
    //Set task parameters
    taskParams = OS_TASK_DEFAULT_PARAMS;
@@ -479,6 +328,34 @@ int_t main(void)
       TRACE_ERROR("Failed to create task!\r\n");
    }
 
+   //Set task parameters
+   taskParams = OS_TASK_DEFAULT_PARAMS;
+   taskParams.stackSize = 200;
+   taskParams.priority = OS_TASK_PRIORITY_NORMAL;
+
+   //Create a task to handle incoming requests
+   taskId = osCreateTask("Rx", SU_ReceiveTask, NULL, &taskParams);
+   //Failed to create the task?
+   if(taskId == OS_INVALID_TASK_ID)
+   {
+      //Debug message
+      TRACE_ERROR("Failed to create task!\r\n");
+   }
+
+   //Set task parameters
+   taskParams = OS_TASK_DEFAULT_PARAMS;
+   taskParams.stackSize = 200;
+   taskParams.priority = OS_TASK_PRIORITY_NORMAL;
+
+   //Create a task to handle incoming requests
+   taskId = osCreateTask("Tx", SU_TransmitTask, NULL, &taskParams);
+   //Failed to create the task?
+   if(taskId == OS_INVALID_TASK_ID)
+   {
+      //Debug message
+      TRACE_ERROR("Failed to create task!\r\n");
+   }
+   
    //Start the execution of tasks
    osStartKernel();
 
@@ -496,10 +373,7 @@ void tlsServerTask(void *param)
 {
    error_t error;
    uint_t counter;
-   uint16_t clientPort;
-   IpAddr clientIpAddr;
-   Socket *serverSocket;
-   Socket *clientSocket;
+   TlsSocketHandle /*Socket*/ *clientSocket;
    OsTaskId taskId;
    OsTaskParameters taskParams;
 
@@ -530,33 +404,6 @@ void tlsServerTask(void *param)
    }
 #endif
 
-   //Open a socket
-   serverSocket = socketOpen(SOCKET_TYPE_STREAM, SOCKET_IP_PROTO_TCP);
-   //Failed to open socket?
-   if(!serverSocket)
-   {
-      //Debug message
-      TRACE_ERROR("Cannot open socket!\r\n");
-   }
-
-   //Bind newly created socket to port 443
-   error = socketBind(serverSocket, &IP_ADDR_ANY, APP_SERVER_PORT);
-   //Failed to bind socket to port 443?
-   if(error)
-   {
-      //Debug message
-      TRACE_ERROR("Failed to bind socket!\r\n");
-   }
-
-   //Place socket in listening state
-   error = socketListen(serverSocket, 0);
-   //Any failure to report?
-   if(error)
-   {
-      //Debug message
-      TRACE_ERROR("Failed to enter listening state!\r\n");
-   }
-
    //Process incoming connections to the server
    for(counter = 1; ; counter++)
    {
@@ -566,16 +413,15 @@ void tlsServerTask(void *param)
 
       //Limit the number of simultaneous connections to the HTTP server
       osWaitForSemaphore(&connectionSemaphore, INFINITE_DELAY);
-
+       
       //Accept an incoming connection
-      clientSocket = socketAccept(serverSocket, &clientIpAddr, &clientPort);
+       clientSocket = slip_sock_wait_connect();
 
       //Make sure the socket handle is valid
       if(clientSocket != NULL)
       {
          //Debug message
-         TRACE_INFO("Connection #%u established with client %s port %" PRIu16 "...\r\n",
-            counter, ipAddrToString(&clientIpAddr, NULL), clientPort);
+         TRACE_INFO("Connection #%u established\n", counter);
 
          //Set task parameters
          taskParams = OS_TASK_DEFAULT_PARAMS;
@@ -592,7 +438,7 @@ void tlsServerTask(void *param)
             TRACE_ERROR("Failed to create task!\r\n");
 
             //Close socket
-            socketClose(clientSocket);
+            slip_sock_close(clientSocket);
             //Release semaphore
             osReleaseSemaphore(&connectionSemaphore);
          }
@@ -616,7 +462,7 @@ void tlsClientTask(void *param)
    size_t serverKeyLen;
    const char_t *trustedCaList;
    size_t trustedCaListLen;
-   Socket *clientSocket;
+   TlsSocketHandle /*Socket*/ *clientSocket;
    TlsContext *tlsContext;
    char_t buffer[512];
 
@@ -624,13 +470,13 @@ void tlsClientTask(void *param)
    tlsContext = NULL;
 
    //Retrieve socket handle
-   clientSocket = (Socket *) param;
+   clientSocket = /*(Socket *)*/ (TlsSocketHandle *) param;
 
    //Start of exception handling block
    do
    {
       //Set timeout
-      error = socketSetTimeout(clientSocket, APP_SERVER_TIMEOUT);
+      error = slip_sock_set_timeout(clientSocket, APP_SERVER_TIMEOUT);
       //Any error to report?
       if(error)
          break;
@@ -652,8 +498,8 @@ void tlsClientTask(void *param)
       if(error)
          break;
 
-      //Bind TLS to the relevant socket
-      error = tlsSetSocket(tlsContext, clientSocket);
+      //Bind TLS to the relevant socket and set send and receive callbacks (I/O abstraction layer)
+      error = tlsSetSocketCallbacks(tlsContext, tlsSendCallback, tlsReceiveCallback, clientSocket);
       //Any error to report?
       if(error)
          break;
@@ -897,7 +743,7 @@ void tlsClientTask(void *param)
          break;
 
       //Graceful shutdown
-      error = socketShutdown(clientSocket, SOCKET_SD_BOTH);
+//      error = socketShutdown(clientSocket, SOCKET_SD_BOTH);
       //Any error to report?
       if(error)
          break;
@@ -914,7 +760,7 @@ void tlsClientTask(void *param)
    //Close socket
    if(clientSocket != NULL)
    {
-      socketClose(clientSocket);
+      slip_sock_close(clientSocket);
    }
 
    //Debug message
@@ -962,4 +808,14 @@ size_t dumpArray(char_t *buffer, const uint8_t *data, size_t length)
 
    //Return the length of the resulting string
    return n;
+}
+
+static error_t tlsSendCallback(TlsSocketHandle socket, const void *data, size_t length, size_t *written, uint_t flags)
+{
+    return slip_sock_send(socket, data, length, written);
+}
+
+static error_t tlsReceiveCallback(TlsSocketHandle socket, void *data, size_t size, size_t *received, uint_t flags)
+{
+    return slip_sock_recv(socket, data, size, received);
 }
